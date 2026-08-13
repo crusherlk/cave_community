@@ -1,9 +1,7 @@
-import { Link, type LinkOptions, useMatchRoute } from "@tanstack/react-router";
+import { Link, type LinkOptions } from "@tanstack/react-router";
 import { cn } from "#/lib/utils";
 
 function ClubNav() {
-  const matchRoute = useMatchRoute();
-
   const navItems: (LinkOptions & { label: string })[] = [
     {
       label: "Community",
