@@ -3,18 +3,20 @@ import { getUserSessionFn } from "#/auth/actions";
 import Footer from "#/components/Footer";
 import Header from "#/components/Header";
 
-export const Route = createFileRoute("/_authenticated")({
+export const Route = createFileRoute("/_appLayout")({
   component: RouteComponent,
-  beforeLoad: async () => {
+  loader: async () => {
     const session = await getUserSessionFn();
-    console.log(session);
+    return { session };
   },
 });
 
 function RouteComponent() {
+  const { session } = Route.useLoaderData();
+
   return (
     <div className="flex min-h-dvh flex-col">
-      <Header />
+      <Header session={session} />
       <div className="flex-1">
         <Outlet />
       </div>

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import PostCard from "#/components/post/postCard";
 
-export const Route = createFileRoute("/_authenticated/_club/$clubId/")({
+export const Route = createFileRoute("/_appLayout/_club/$clubId/")({
   component: ClubIndex,
 });
 

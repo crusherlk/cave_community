@@ -110,3 +110,12 @@ export const getUserSessionFn = createServerFn({ method: "GET" }).handler(
     return await getUserSession();
   },
 );
+
+export const signoutFn = createServerFn({ method: "GET" }).handler(async () => {
+  const session = await getUserSession();
+  if (session == null) {
+    return { message: "Session not found" };
+  }
+
+  await removeAllUserSessionsById(session.userId);
+});

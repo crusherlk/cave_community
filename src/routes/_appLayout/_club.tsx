@@ -2,7 +2,7 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 import ClubNav from "#/components/club/clubNav";
 import { Button } from "#/components/ui/button";
 
-export const Route = createFileRoute("/_authenticated/_club")({
+export const Route = createFileRoute("/_appLayout/_club")({
   component: RouteComponent,
 });
 

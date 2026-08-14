@@ -5,7 +5,7 @@ import CreateComment from "#/components/comment/createComment";
 import PostHeader from "#/components/post/postHeader";
 import { Button } from "#/components/ui/button";
 
-export const Route = createFileRoute("/_authenticated/_club/$clubId/posts/$id")(
+export const Route = createFileRoute("/_appLayout/_club/$clubId/posts/$id")(
   {
     component: RouteComponent,
   },

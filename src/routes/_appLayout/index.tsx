@@ -4,7 +4,7 @@ import ClubCard from "#/components/club/clubCard";
 import SearchForm from "#/components/SearchForm.tsx";
 import { Button } from "#/components/ui/button";
 
-export const Route = createFileRoute("/_authenticated/")({
+export const Route = createFileRoute("/_appLayout/")({
   component: App,
 });
 
@@ -12,12 +12,12 @@ function App() {
   return (
     <main className="cc_container space-y-14 py-10">
       <section className="mx-auto w-2xl text-center">
-        <h1 className="text-4xl font-bold tracking-tight">
+        <h1 className="font-bold text-4xl tracking-tight">
           Discover Communities
         </h1>
-        <p className="text-xl font-medium">
+        <p className="font-medium text-xl">
           or{" "}
-          <span className="text-primary cursor-pointer underline underline-offset-2">
+          <span className="cursor-pointer text-primary underline underline-offset-2">
             create your own
           </span>
         </p>

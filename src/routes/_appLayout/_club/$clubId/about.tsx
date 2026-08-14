@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { LockIcon, TagIcon, UsersIcon } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/_club/$clubId/about")({
+export const Route = createFileRoute("/_appLayout/_club/$clubId/about")({
   component: RouteComponent,
 });
 
