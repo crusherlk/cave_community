@@ -19,8 +19,8 @@ function RouteComponent() {
             <div className="h-36 w-full bg-gray-500"></div>
             <div className="space-y-4 p-4">
               <div className="">
-                <p className="text-lg font-medium">Editors Club</p>
-                <p className="text-muted-foreground text-xs font-bold">
+                <p className="font-medium text-lg">Editors Club</p>
+                <p className="font-bold text-muted-foreground text-xs">
                   club.com/editorsclub
                 </p>
               </div>
@@ -31,17 +31,17 @@ function RouteComponent() {
                   distinctio sint ab omnis aliquam quas?
                 </p>
               </div>
-              <div className="border-border flex justify-around border-y py-2">
+              <div className="flex justify-around border-border border-y py-2">
                 <div className="text-center">
-                  <p className="text-lg font-medium">3.8K</p>
+                  <p className="font-medium text-lg">3.8K</p>
                   <p className="text-muted-foreground text-xs">Members</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-lg font-medium">5</p>
+                  <p className="font-medium text-lg">5</p>
                   <p className="text-muted-foreground text-xs">Online</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-lg font-medium">3</p>
+                  <p className="font-medium text-lg">3</p>
                   <p className="text-muted-foreground text-xs">Admins</p>
                 </div>
               </div>

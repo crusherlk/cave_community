@@ -17,7 +17,7 @@ export async function createUserSession(userId: number) {
 
   await db.insert(SessionTable).values({
     token: sessionId,
-    expiresAt: Date.now() + SESSION_EXPIRE_SECONDS,
+    expiresAt: new Date(Date.now() + SESSION_EXPIRE_SECONDS),
     userId,
   });
 
