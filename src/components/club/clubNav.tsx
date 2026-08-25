@@ -1,12 +1,16 @@
 import { Link, type LinkOptions } from "@tanstack/react-router";
 import { cn } from "#/lib/utils";
 
-function ClubNav() {
+type ClubNavProps = {
+  clubId: string;
+};
+
+function ClubNav({ clubId }: ClubNavProps) {
   const navItems: (LinkOptions & { label: string })[] = [
     {
       label: "Community",
       to: "/$clubId",
-      params: { clubId: "test" },
+      params: { clubId },
     },
     // {
     //   label: "Classroom",
@@ -25,7 +29,7 @@ function ClubNav() {
     {
       label: "About",
       to: "/$clubId/about",
-      params: { clubId: "test" },
+      params: { clubId },
     },
   ];
 
@@ -40,6 +44,7 @@ function ClubNav() {
               "data-[status=active]:border-black data-[status=active]:text-black",
             )}
             to={item.to}
+            params={item.params}
             activeOptions={{ exact: true }}
           >
             {item.label}

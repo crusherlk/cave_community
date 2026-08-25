@@ -1,14 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Settings2Icon } from "lucide-react";
+import { findClubs } from "#/actions/club.actions";
 import ClubCard from "#/components/club/clubCard";
 import SearchForm from "#/components/SearchForm.tsx";
 import { Button } from "#/components/ui/button";
 
 export const Route = createFileRoute("/_appLayout/")({
   component: App,
+  loader: async () => {
+    const clubs = await findClubs();
+
+    return { clubs };
+  },
 });
 
 function App() {
+  const { clubs } = Route.useLoaderData();
+
   return (
     <main className="cc_container space-y-14 py-10">
       <section className="mx-auto w-2xl text-center">
@@ -26,7 +34,7 @@ function App() {
         </div>
       </section>
       <section className="space-y-6">
-        <div className="flex gap-2">
+        {/* <div className="flex gap-2">
           <div className="flex flex-1 gap-2">
             <Button variant="outline" className="rounded-full">
               Trending 🔥
@@ -46,9 +54,11 @@ function App() {
               Filter <Settings2Icon data-icon="inline-end" />
             </Button>
           </div>
-        </div>
+        </div> */}
         <div className="grid grid-cols-3 gap-8">
-          <ClubCard />
+          {clubs.map((club) => (
+            <ClubCard key={club.id} club={club} />
+          ))}
         </div>
       </section>
     </main>

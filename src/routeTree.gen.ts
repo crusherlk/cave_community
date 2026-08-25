@@ -13,10 +13,11 @@ import { Route as AppLayoutRouteImport } from './routes/_appLayout'
 import { Route as SigninRouteImport } from './routes/signin'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AppLayoutIndexRouteImport } from './routes/_appLayout/index'
-import { Route as AppLayoutClubRouteImport } from './routes/_appLayout/_club'
-import { Route as AppLayoutClubClubIdIndexRouteImport } from './routes/_appLayout/_club/$clubId/index'
+import { Route as AppLayoutClubClubIdRouteImport } from './routes/_appLayout/_club.$clubId'
+import { Route as AppLayoutClubClubIdMemberAuthRouteImport } from './routes/_appLayout/_club/$clubId/_memberAuth'
 import { Route as AppLayoutClubClubIdAboutRouteImport } from './routes/_appLayout/_club/$clubId/about'
-import { Route as AppLayoutClubClubIdPostsIdRouteImport } from './routes/_appLayout/_club/$clubId/posts.$id'
+import { Route as AppLayoutClubClubIdMemberAuthIndexRouteImport } from './routes/_appLayout/_club/$clubId/_memberAuth/index'
+import { Route as AppLayoutClubClubIdMemberAuthPostsIdRouteImport } from './routes/_appLayout/_club/$clubId/_memberAuth/posts.$id'
 
 const AppLayoutRoute = AppLayoutRouteImport.update({
   id: '/_appLayout',
@@ -37,55 +38,63 @@ const AppLayoutIndexRoute = AppLayoutIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppLayoutRoute,
 } as any)
-const AppLayoutClubRoute = AppLayoutClubRouteImport.update({
-  id: '/_club',
+const AppLayoutClubClubIdRoute = AppLayoutClubClubIdRouteImport.update({
+  id: '/_club/$clubId',
+  path: '/$clubId',
   getParentRoute: () => AppLayoutRoute,
 } as any)
-const AppLayoutClubClubIdIndexRoute =
-  AppLayoutClubClubIdIndexRouteImport.update({
-    id: '/$clubId/',
-    path: '/$clubId/',
-    getParentRoute: () => AppLayoutClubRoute,
+const AppLayoutClubClubIdMemberAuthRoute =
+  AppLayoutClubClubIdMemberAuthRouteImport.update({
+    id: '/_memberAuth',
+    getParentRoute: () => AppLayoutClubClubIdRoute,
   } as any)
 const AppLayoutClubClubIdAboutRoute =
   AppLayoutClubClubIdAboutRouteImport.update({
-    id: '/$clubId/about',
-    path: '/$clubId/about',
-    getParentRoute: () => AppLayoutClubRoute,
+    id: '/about',
+    path: '/about',
+    getParentRoute: () => AppLayoutClubClubIdRoute,
   } as any)
-const AppLayoutClubClubIdPostsIdRoute =
-  AppLayoutClubClubIdPostsIdRouteImport.update({
-    id: '/$clubId/posts/$id',
-    path: '/$clubId/posts/$id',
-    getParentRoute: () => AppLayoutClubRoute,
+const AppLayoutClubClubIdMemberAuthIndexRoute =
+  AppLayoutClubClubIdMemberAuthIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppLayoutClubClubIdMemberAuthRoute,
+  } as any)
+const AppLayoutClubClubIdMemberAuthPostsIdRoute =
+  AppLayoutClubClubIdMemberAuthPostsIdRouteImport.update({
+    id: '/posts/$id',
+    path: '/posts/$id',
+    getParentRoute: () => AppLayoutClubClubIdMemberAuthRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppLayoutIndexRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
+  '/$clubId': typeof AppLayoutClubClubIdRouteWithChildren
   '/$clubId/about': typeof AppLayoutClubClubIdAboutRoute
-  '/$clubId/': typeof AppLayoutClubClubIdIndexRoute
-  '/$clubId/posts/$id': typeof AppLayoutClubClubIdPostsIdRoute
+  '/$clubId/': typeof AppLayoutClubClubIdMemberAuthIndexRoute
+  '/$clubId/posts/$id': typeof AppLayoutClubClubIdMemberAuthPostsIdRoute
 }
 export interface FileRoutesByTo {
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/': typeof AppLayoutIndexRoute
+  '/$clubId': typeof AppLayoutClubClubIdMemberAuthIndexRoute
   '/$clubId/about': typeof AppLayoutClubClubIdAboutRoute
-  '/$clubId': typeof AppLayoutClubClubIdIndexRoute
-  '/$clubId/posts/$id': typeof AppLayoutClubClubIdPostsIdRoute
+  '/$clubId/posts/$id': typeof AppLayoutClubClubIdMemberAuthPostsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_appLayout': typeof AppLayoutRouteWithChildren
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
-  '/_appLayout/_club': typeof AppLayoutClubRouteWithChildren
   '/_appLayout/': typeof AppLayoutIndexRoute
+  '/_appLayout/_club/$clubId': typeof AppLayoutClubClubIdRouteWithChildren
+  '/_appLayout/_club/$clubId/_memberAuth': typeof AppLayoutClubClubIdMemberAuthRouteWithChildren
   '/_appLayout/_club/$clubId/about': typeof AppLayoutClubClubIdAboutRoute
-  '/_appLayout/_club/$clubId/': typeof AppLayoutClubClubIdIndexRoute
-  '/_appLayout/_club/$clubId/posts/$id': typeof AppLayoutClubClubIdPostsIdRoute
+  '/_appLayout/_club/$clubId/_memberAuth/': typeof AppLayoutClubClubIdMemberAuthIndexRoute
+  '/_appLayout/_club/$clubId/_memberAuth/posts/$id': typeof AppLayoutClubClubIdMemberAuthPostsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -93,6 +102,7 @@ export interface FileRouteTypes {
     | '/'
     | '/signin'
     | '/signup'
+    | '/$clubId'
     | '/$clubId/about'
     | '/$clubId/'
     | '/$clubId/posts/$id'
@@ -101,19 +111,20 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/'
-    | '/$clubId/about'
     | '/$clubId'
+    | '/$clubId/about'
     | '/$clubId/posts/$id'
   id:
     | '__root__'
     | '/_appLayout'
     | '/signin'
     | '/signup'
-    | '/_appLayout/_club'
     | '/_appLayout/'
+    | '/_appLayout/_club/$clubId'
+    | '/_appLayout/_club/$clubId/_memberAuth'
     | '/_appLayout/_club/$clubId/about'
-    | '/_appLayout/_club/$clubId/'
-    | '/_appLayout/_club/$clubId/posts/$id'
+    | '/_appLayout/_club/$clubId/_memberAuth/'
+    | '/_appLayout/_club/$clubId/_memberAuth/posts/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -152,61 +163,84 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLayoutIndexRouteImport
       parentRoute: typeof AppLayoutRoute
     }
-    '/_appLayout/_club': {
-      id: '/_appLayout/_club'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AppLayoutClubRouteImport
+    '/_appLayout/_club/$clubId': {
+      id: '/_appLayout/_club/$clubId'
+      path: '/$clubId'
+      fullPath: '/$clubId'
+      preLoaderRoute: typeof AppLayoutClubClubIdRouteImport
       parentRoute: typeof AppLayoutRoute
     }
-    '/_appLayout/_club/$clubId/': {
-      id: '/_appLayout/_club/$clubId/'
-      path: '/$clubId'
-      fullPath: '/$clubId/'
-      preLoaderRoute: typeof AppLayoutClubClubIdIndexRouteImport
-      parentRoute: typeof AppLayoutClubRoute
+    '/_appLayout/_club/$clubId/_memberAuth': {
+      id: '/_appLayout/_club/$clubId/_memberAuth'
+      path: ''
+      fullPath: '/$clubId'
+      preLoaderRoute: typeof AppLayoutClubClubIdMemberAuthRouteImport
+      parentRoute: typeof AppLayoutClubClubIdRoute
     }
     '/_appLayout/_club/$clubId/about': {
       id: '/_appLayout/_club/$clubId/about'
-      path: '/$clubId/about'
+      path: '/about'
       fullPath: '/$clubId/about'
       preLoaderRoute: typeof AppLayoutClubClubIdAboutRouteImport
-      parentRoute: typeof AppLayoutClubRoute
+      parentRoute: typeof AppLayoutClubClubIdRoute
     }
-    '/_appLayout/_club/$clubId/posts/$id': {
-      id: '/_appLayout/_club/$clubId/posts/$id'
-      path: '/$clubId/posts/$id'
+    '/_appLayout/_club/$clubId/_memberAuth/': {
+      id: '/_appLayout/_club/$clubId/_memberAuth/'
+      path: '/'
+      fullPath: '/$clubId/'
+      preLoaderRoute: typeof AppLayoutClubClubIdMemberAuthIndexRouteImport
+      parentRoute: typeof AppLayoutClubClubIdMemberAuthRoute
+    }
+    '/_appLayout/_club/$clubId/_memberAuth/posts/$id': {
+      id: '/_appLayout/_club/$clubId/_memberAuth/posts/$id'
+      path: '/posts/$id'
       fullPath: '/$clubId/posts/$id'
-      preLoaderRoute: typeof AppLayoutClubClubIdPostsIdRouteImport
-      parentRoute: typeof AppLayoutClubRoute
+      preLoaderRoute: typeof AppLayoutClubClubIdMemberAuthPostsIdRouteImport
+      parentRoute: typeof AppLayoutClubClubIdMemberAuthRoute
     }
   }
 }
 
-interface AppLayoutClubRouteChildren {
+interface AppLayoutClubClubIdMemberAuthRouteChildren {
+  AppLayoutClubClubIdMemberAuthIndexRoute: typeof AppLayoutClubClubIdMemberAuthIndexRoute
+  AppLayoutClubClubIdMemberAuthPostsIdRoute: typeof AppLayoutClubClubIdMemberAuthPostsIdRoute
+}
+
+const AppLayoutClubClubIdMemberAuthRouteChildren: AppLayoutClubClubIdMemberAuthRouteChildren =
+  {
+    AppLayoutClubClubIdMemberAuthIndexRoute:
+      AppLayoutClubClubIdMemberAuthIndexRoute,
+    AppLayoutClubClubIdMemberAuthPostsIdRoute:
+      AppLayoutClubClubIdMemberAuthPostsIdRoute,
+  }
+
+const AppLayoutClubClubIdMemberAuthRouteWithChildren =
+  AppLayoutClubClubIdMemberAuthRoute._addFileChildren(
+    AppLayoutClubClubIdMemberAuthRouteChildren,
+  )
+
+interface AppLayoutClubClubIdRouteChildren {
+  AppLayoutClubClubIdMemberAuthRoute: typeof AppLayoutClubClubIdMemberAuthRouteWithChildren
   AppLayoutClubClubIdAboutRoute: typeof AppLayoutClubClubIdAboutRoute
-  AppLayoutClubClubIdIndexRoute: typeof AppLayoutClubClubIdIndexRoute
-  AppLayoutClubClubIdPostsIdRoute: typeof AppLayoutClubClubIdPostsIdRoute
 }
 
-const AppLayoutClubRouteChildren: AppLayoutClubRouteChildren = {
+const AppLayoutClubClubIdRouteChildren: AppLayoutClubClubIdRouteChildren = {
+  AppLayoutClubClubIdMemberAuthRoute:
+    AppLayoutClubClubIdMemberAuthRouteWithChildren,
   AppLayoutClubClubIdAboutRoute: AppLayoutClubClubIdAboutRoute,
-  AppLayoutClubClubIdIndexRoute: AppLayoutClubClubIdIndexRoute,
-  AppLayoutClubClubIdPostsIdRoute: AppLayoutClubClubIdPostsIdRoute,
 }
 
-const AppLayoutClubRouteWithChildren = AppLayoutClubRoute._addFileChildren(
-  AppLayoutClubRouteChildren,
-)
+const AppLayoutClubClubIdRouteWithChildren =
+  AppLayoutClubClubIdRoute._addFileChildren(AppLayoutClubClubIdRouteChildren)
 
 interface AppLayoutRouteChildren {
-  AppLayoutClubRoute: typeof AppLayoutClubRouteWithChildren
   AppLayoutIndexRoute: typeof AppLayoutIndexRoute
+  AppLayoutClubClubIdRoute: typeof AppLayoutClubClubIdRouteWithChildren
 }
 
 const AppLayoutRouteChildren: AppLayoutRouteChildren = {
-  AppLayoutClubRoute: AppLayoutClubRouteWithChildren,
   AppLayoutIndexRoute: AppLayoutIndexRoute,
+  AppLayoutClubClubIdRoute: AppLayoutClubClubIdRouteWithChildren,
 }
 
 const AppLayoutRouteWithChildren = AppLayoutRoute._addFileChildren(

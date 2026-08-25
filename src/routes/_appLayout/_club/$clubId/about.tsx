@@ -1,22 +1,30 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, notFound } from "@tanstack/react-router";
 import { LockIcon, TagIcon, UsersIcon } from "lucide-react";
+import { findClubById } from "#/actions/club.actions";
+import { Avatar, AvatarFallback } from "#/components/ui/avatar";
 
 export const Route = createFileRoute("/_appLayout/_club/$clubId/about")({
   component: RouteComponent,
+  loader: async ({ params }) => {
+    const club = await findClubById({
+      data: {
+        clubId: parseInt(params.clubId),
+      },
+    });
+
+    if (!club) throw notFound();
+
+    return { club };
+  },
 });
 
 function RouteComponent() {
+  const { club } = Route.useLoaderData();
   return (
-    <main className="border-border space-y-8 rounded-lg bg-white p-6">
+    <main className="space-y-8 rounded-lg border-border bg-white p-6">
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold">Editors club</h2>
-        <div className="space-y-2">
-          <div className="h-100 w-full rounded-lg bg-gray-500"></div>
-          <div className="flex gap-2">
-            <div className="size-20 rounded-lg bg-gray-500"></div>
-            <div className="size-20 rounded-lg bg-gray-500"></div>
-          </div>
-        </div>
+        <h2 className="font-bold text-2xl">{club.name}</h2>
+        <div className="h-100 w-full rounded-lg bg-gray-500"></div>
         <div className="mt-10 flex flex-wrap items-center gap-10">
           <div className="flex gap-2">
             <LockIcon />
@@ -30,20 +38,19 @@ function RouteComponent() {
             <TagIcon />
             <span className="font-medium">Free</span>
           </div>
-          <div className="flex gap-2">
-            <div className="size-6 rounded-full bg-gray-500"></div>
-            <span className="font-medium">By John Doe</span>
+          <div className="flex items-center gap-2">
+            <Avatar className="cursor-pointer">
+              <AvatarFallback>
+                {club.owner?.name.slice(0, 2).toUpperCase() || "CA"}
+              </AvatarFallback>
+            </Avatar>
+            <p className="font-medium">
+              By <span className="capitalize">{club.owner?.name}</span>
+            </p>
           </div>
         </div>
       </div>
-      <div>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos
-        reprehenderit, voluptates, possimus rem dignissimos, iure dolores
-        impedit eum sapiente consequatur molestias aut dolor provident deserunt
-        aliquam nulla aperiam quas non id. Illum expedita adipisci, et voluptas
-        suscipit eos dolor minima autem exercitationem natus illo temporibus
-        nobis quisquam nihil, alias consequuntur?
-      </div>
+      <div>{club.description}</div>
     </main>
   );
 }

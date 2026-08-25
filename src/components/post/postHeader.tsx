@@ -1,13 +1,23 @@
-import React from "react";
+import { formatDate } from "#/lib/date-format";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 
-export default function PostHeader() {
+type HeaderProps = {
+  username: string;
+  dateString: string;
+};
+
+export default function PostHeader({ username, dateString }: HeaderProps) {
   return (
     <div className="flex items-center gap-2">
-      <div className="size-10 shrink-0 rounded-full bg-gray-500" />
+      <Avatar className="size-10 cursor-pointer">
+        <AvatarFallback>
+          {username.slice(0, 2).toUpperCase() || "CA"}
+        </AvatarFallback>
+      </Avatar>
       <div className="space-y-0">
-        <p className="font-medium text-base">Anze Kos</p>
+        <p className="font-medium text-base">{username}</p>
         <div className="flex items-center gap-2 text-muted-foreground text-sm">
-          <p>Feb 24</p>
+          <p>{formatDate(dateString)}</p>
           <p className="font-bold">General discussion</p>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { signoutFn } from "#/auth/actions";
 import { cn } from "#/lib/utils";
 import ClubNavigator from "./clubNavigator";
@@ -15,7 +15,7 @@ import {
 type HeaderProps = {
   session: {
     token: string;
-    expiresAt: number;
+    expiresAt: Date;
     user: {
       id: number;
       name: string;
@@ -23,15 +23,11 @@ type HeaderProps = {
   } | null;
 };
 
-const clubNavExcludes = ["/"];
-
 export default function Header({ session }: HeaderProps) {
   const navigate = useNavigate();
-  const location = useLocation();
-  const isClubNavShow = !clubNavExcludes.includes(location.pathname);
 
   return (
-    <header className={cn("bg-white", !isClubNavShow && "border-b")}>
+    <header className={cn("bg-white")}>
       <div className="cc_container space-y-8">
         <div
           className={cn(
