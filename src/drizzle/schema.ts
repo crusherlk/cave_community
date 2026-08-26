@@ -44,7 +44,8 @@ export const ClubTable = sqliteTable(
   {
     id: integer().primaryKey({ autoIncrement: true }),
     name: text().notNull(),
-    description: text().notNull(),
+    shortDescription: text().notNull(),
+    longDescription: text().notNull(),
     ownerId: integer()
       .notNull()
       .references(() => UserTable.id, { onDelete: "cascade" }),

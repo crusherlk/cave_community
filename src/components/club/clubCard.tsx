@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 type CardProps = {
   id: number;
   name: string;
-  description: string;
+  shortDescription: string;
 };
 
 function ClubCard({ club }: { club: CardProps }) {
@@ -21,8 +21,8 @@ function ClubCard({ club }: { club: CardProps }) {
             {club.name}
           </span>
         </div>
-        <div className="line-clamp-3 overflow-hidden text-ellipsis">
-          {club.description}
+        <div className="line-clamp-3 min-h-18 overflow-hidden text-ellipsis">
+          {club.shortDescription}
         </div>
         <div className="flex items-center gap-2">
           <span>25.7k Members</span>

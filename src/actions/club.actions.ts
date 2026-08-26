@@ -1,5 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
+import { and, eq, or } from "drizzle-orm";
 import { db } from "#/drizzle/db";
+import { ClubMemberTable } from "#/drizzle/schema";
 
 export const findClubs = createServerFn({ method: "GET" }).handler(async () => {
   try {
@@ -16,7 +18,7 @@ export const findClubById = createServerFn({ method: "GET" })
   .validator((data: { clubId: number }) => data)
   .handler(async ({ data }) => {
     try {
-      const club = db.query.ClubTable.findFirst({
+      const club = await db.query.ClubTable.findFirst({
         where: {
           id: data.clubId,
         },
@@ -26,6 +28,21 @@ export const findClubById = createServerFn({ method: "GET" })
               name: true,
             },
           },
+        },
+        extras: {
+          memberCount: (club) =>
+            db.$count(ClubMemberTable, eq(ClubMemberTable.clubId, club.id)),
+          adminCount: (club) =>
+            db.$count(
+              ClubMemberTable,
+              and(
+                eq(ClubMemberTable.clubId, club.id),
+                or(
+                  eq(ClubMemberTable.role, "moderator"),
+                  eq(ClubMemberTable.role, "owner"),
+                ),
+              ),
+            ),
         },
       });
 

@@ -32,7 +32,7 @@ function RouteComponent() {
           </div>
           <div className="flex gap-2">
             <UsersIcon />
-            <span className="font-medium">3.5k Members</span>
+            <span className="font-medium">{club.memberCount} Members</span>
           </div>
           <div className="flex gap-2">
             <TagIcon />
@@ -50,7 +50,7 @@ function RouteComponent() {
           </div>
         </div>
       </div>
-      <div>{club.description}</div>
+      <div>{club.longDescription}</div>
     </main>
   );
 }

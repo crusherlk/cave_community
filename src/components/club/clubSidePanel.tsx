@@ -6,7 +6,9 @@ type PanelProps = {
   club: {
     id: number;
     name: string;
-    description: string;
+    shortDescription: string;
+    memberCount: number;
+    adminCount: number;
   };
   userId: number | null;
   isMember: boolean;
@@ -26,19 +28,19 @@ function ClubSidePanel({ club, userId, isMember }: PanelProps) {
             </p>
           </div>
           <div className="text-wrap">
-            <p>{club.description}</p>
+            <p>{club.shortDescription}</p>
           </div>
           <div className="flex justify-around border-border border-y py-2">
             <div className="text-center">
-              <p className="font-medium text-lg">3.8K</p>
+              <p className="font-medium text-lg">{club.memberCount}</p>
               <p className="text-muted-foreground text-xs">Members</p>
             </div>
             <div className="text-center">
-              <p className="font-medium text-lg">5</p>
+              <p className="font-medium text-lg">N/A</p>
               <p className="text-muted-foreground text-xs">Online</p>
             </div>
             <div className="text-center">
-              <p className="font-medium text-lg">3</p>
+              <p className="font-medium text-lg">{club.adminCount}</p>
               <p className="text-muted-foreground text-xs">Admins</p>
             </div>
           </div>
