@@ -1,14 +1,28 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Settings2Icon } from "lucide-react";
+import { createFileRoute, stripSearchParams } from "@tanstack/react-router";
+import z from "zod";
 import { findClubs } from "#/actions/club.actions";
 import ClubCard from "#/components/club/clubCard";
 import SearchForm from "#/components/SearchForm.tsx";
-import { Button } from "#/components/ui/button";
+
+const clubSearchParamSchema = z.object({
+  q: z.string().catch("").optional(),
+});
 
 export const Route = createFileRoute("/_appLayout/")({
   component: App,
-  loader: async () => {
-    const clubs = await findClubs();
+  validateSearch: clubSearchParamSchema,
+  search: {
+    middlewares: [stripSearchParams({ q: "" })],
+  },
+  loaderDeps: ({ search: { q } }) => ({ query: q ?? "" }),
+  loader: async ({ deps }) => {
+    const { query } = deps;
+
+    const clubs = await findClubs({
+      data: {
+        query: query.toLowerCase(),
+      },
+    });
 
     return { clubs };
   },
@@ -16,6 +30,7 @@ export const Route = createFileRoute("/_appLayout/")({
 
 function App() {
   const { clubs } = Route.useLoaderData();
+  const { q: query } = Route.useSearch();
 
   return (
     <main className="cc_container space-y-14 py-10">
@@ -30,7 +45,7 @@ function App() {
           </span>
         </p>
         <div className="mt-8">
-          <SearchForm />
+          <SearchForm query={query ?? ""} />
         </div>
       </section>
       <section className="space-y-6">
@@ -60,6 +75,9 @@ function App() {
             <ClubCard key={club.id} club={club} />
           ))}
         </div>
+        {clubs.length === 0 && (
+          <p className="text-center">Couldn't find any clubs for you.</p>
+        )}
       </section>
     </main>
   );

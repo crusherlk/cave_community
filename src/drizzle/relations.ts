@@ -46,10 +46,12 @@ export const relations = defineRelations(schema, (r) => ({
     user: r.one.UserTable({
       from: r.ClubMemberTable.memberId,
       to: r.UserTable.id,
+      optional: false
     }),
     club: r.one.ClubTable({
       from: r.ClubMemberTable.clubId,
       to: r.ClubTable.id,
+      optional: false
     }),
   },
 

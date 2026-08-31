@@ -70,3 +70,39 @@ export const getClubMemberRoleFn = createServerFn({ method: "GET" })
   .handler(async ({ data }) => {
     return await getClubMemberRole(data.clubId);
   });
+
+export const findClubsByUserIdFn = createServerFn({ method: "GET" }).handler(
+  async () => {
+    try {
+      const session = await getUserSessionFn();
+
+      if (session == null) {
+        return [];
+      }
+
+      const memberClubs = await db.query.ClubMemberTable.findMany({
+        where: {
+          memberId: session.userId,
+        },
+        with: {
+          club: {
+            columns: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      const returningClubs = memberClubs.map((mc) => mc.club);
+
+      return returningClubs;
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  },
+);

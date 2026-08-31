@@ -10,7 +10,8 @@ function ClubCard({ club }: { club: CardProps }) {
   return (
     <Link
       to="/$clubId"
-      params={{ clubId: club.id.toString() }}
+      params={{ clubId: club.id.toString() }} 
+      preload="render"
       className="overflow-hidden rounded-lg border border-border bg-white transition-shadow duration-500 hover:shadow"
     >
       <div className="h-44 w-full bg-stone-500"></div>

@@ -1,13 +1,31 @@
-import { SearchIcon } from "lucide-react";
-import { useRef, useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
+import { SearchIcon, XIcon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
-export default function SearchForm() {
+export default function SearchForm({ query }: { query: string }) {
+  const navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const focusInput = () => {
     if (inputRef.current) inputRef.current.focus();
   };
+
+  const searchClubs = (string: string) => {
+    navigate({
+      to: "/",
+      search: {
+        q: string.trim(),
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (query.trim() !== "") {
+      setSearchTerm(query.trim());
+    }
+  }, [query]);
 
   return (
     <form
@@ -20,8 +38,7 @@ export default function SearchForm() {
       }}
       onSubmit={(e) => {
         e.preventDefault();
-        console.log(searchTerm);
-        setSearchTerm("");
+        searchClubs(searchTerm.trim());
       }}
     >
       <SearchIcon />
@@ -34,6 +51,15 @@ export default function SearchForm() {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
+      {searchTerm !== "" && (
+        <XIcon
+          className="cursor-pointer"
+          onClick={() => {
+            setSearchTerm("");
+            searchClubs("");
+          }}
+        />
+      )}
     </form>
   );
 }
