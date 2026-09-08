@@ -1,7 +1,10 @@
+import { types } from "node:util";
+import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { and, eq, or } from "drizzle-orm";
 import { db } from "#/drizzle/db";
-import { ClubMemberTable } from "#/drizzle/schema";
+import { ClubMemberTable, ClubTable } from "#/drizzle/schema";
+import { authMiddleware } from "#/middleware/auth-middleware";
 
 export const findClubs = createServerFn({ method: "GET" })
   .validator((data: { query: string }) => data)
@@ -20,6 +23,10 @@ export const findClubs = createServerFn({ method: "GET" })
       const clubs = await db.query.ClubTable.findMany({
         where: {
           ...filters,
+        },
+        extras: {
+          memberCount: (club) =>
+            db.$count(ClubMemberTable, eq(ClubMemberTable.clubId, club.id)),
         },
         limit: 10,
       });
@@ -73,3 +80,82 @@ export const findClubById = createServerFn({ method: "GET" })
       return undefined;
     }
   });
+
+export const createClubFn = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .validator(
+    (data: {
+      name: string;
+      shortDescription: string;
+      longDescription: string;
+    }) => data,
+  )
+  .handler(
+    async ({
+      context,
+      data,
+    }): Promise<
+      | {
+          status: "success";
+          message: string;
+          data: { id: number; name: string };
+        }
+      | { status: "error"; message: string }
+    > => {
+      if (!context.session)
+        throw redirect({
+          to: "/signin",
+        });
+
+      try {
+        const payload = {
+          ...data,
+          ownerId: context.session.userId,
+        };
+
+        const transaction = await db.transaction(async (tx) => {
+          const [club] = await tx.insert(ClubTable).values(payload).returning({
+            id: ClubTable.id,
+            name: ClubTable.name,
+          });
+
+          await tx.insert(ClubMemberTable).values({
+            clubId: club.id,
+            memberId: payload.ownerId,
+            role: "owner",
+          });
+
+          return { club };
+        });
+
+        // const [club] = await db
+        //   .insert(ClubTable)
+        //   .values({
+        //     name: data.name,
+        //     shortDescription: data.shortDescription,
+        //     longDescription: data.longDescription,
+        //     ownerId: context.session.userId,
+        //   })
+        //   .returning({
+        //     id: ClubTable.id,
+        //     name: ClubTable.name,
+        //   });
+
+        return {
+          status: "success",
+          message: "club created successfully",
+          data: transaction.club,
+        };
+      } catch (error) {
+        const message = types.isNativeError(error)
+          ? error.message
+          : "something went wrong";
+        console.log(error);
+
+        return {
+          status: "error",
+          message: message,
+        };
+      }
+    },
+  );

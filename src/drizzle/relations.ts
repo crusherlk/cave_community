@@ -25,6 +25,7 @@ export const relations = defineRelations(schema, (r) => ({
     user: r.one.UserTable({
       from: r.SessionTable.userId,
       to: r.UserTable.id,
+      optional: false
     }),
   },
 

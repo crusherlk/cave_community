@@ -4,13 +4,14 @@ type CardProps = {
   id: number;
   name: string;
   shortDescription: string;
+  memberCount: number;
 };
 
 function ClubCard({ club }: { club: CardProps }) {
   return (
     <Link
       to="/$clubId"
-      params={{ clubId: club.id.toString() }} 
+      params={{ clubId: club.id.toString() }}
       preload="render"
       className="overflow-hidden rounded-lg border border-border bg-white transition-shadow duration-500 hover:shadow"
     >
@@ -26,7 +27,7 @@ function ClubCard({ club }: { club: CardProps }) {
           {club.shortDescription}
         </div>
         <div className="flex items-center gap-2">
-          <span>25.7k Members</span>
+          <span>{club.memberCount} Members</span>
           <span>•</span>
           <span className="font-medium">Free</span>
         </div>

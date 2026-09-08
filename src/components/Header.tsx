@@ -1,7 +1,8 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { signoutFn } from "#/auth/actions";
 import { cn } from "#/lib/utils";
-import ClubsPopOver from "./ClubsPopOver";
+import CreateClubDialog from "./club/createClubDialog";
+import MemberClubsPopOver from "./MemberClubsPopOver";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { Button } from "./ui/button";
 import {
@@ -38,7 +39,8 @@ export default function Header({ session }: HeaderProps) {
             <Link to="/" className="shrink-0">
               <img className="w-20" src="/cave-logo.png" alt="cave-logo" />
             </Link>
-            <ClubsPopOver />
+            <MemberClubsPopOver />
+            <CreateClubDialog />
           </div>
           {session == null ? (
             <Button variant="outline" asChild>
