@@ -1,6 +1,7 @@
 import { useRouter } from "@tanstack/react-router";
 import { joinNewClubFn } from "#/actions/club-member.action";
 import { Button } from "../ui/button";
+import ClubSettingsDialog from "./clubSettingsDialog";
 
 type PanelProps = {
   club: {
@@ -24,7 +25,7 @@ function ClubSidePanel({ club, userId, isMember }: PanelProps) {
           <div className="">
             <p className="font-medium text-lg">{club.name}</p>
             <p className="font-bold text-muted-foreground text-xs">
-              club.com/[slug]
+              club.com/{club.id}
             </p>
           </div>
           <div className="text-wrap">
@@ -44,31 +45,35 @@ function ClubSidePanel({ club, userId, isMember }: PanelProps) {
               <p className="text-muted-foreground text-xs">Admins</p>
             </div>
           </div>
-          <Button
-            size="lg"
-            className="w-full cursor-pointer disabled:cursor-not-allowed"
-            disabled={isMember}
-            onClick={async () => {
-              if (userId == null) {
-                alert("login to join!");
-                return;
-              }
+          {isMember ? (
+            <ClubSettingsDialog club={club} />
+          ) : (
+            <Button
+              size="lg"
+              className="w-full cursor-pointer disabled:cursor-not-allowed"
+              disabled={isMember}
+              onClick={async () => {
+                if (userId == null) {
+                  alert("login to join!");
+                  return;
+                }
 
-              await joinNewClubFn({
-                data: {
-                  clubId: club.id,
-                  userId,
-                },
-              });
-              router.invalidate();
-              router.navigate({
-                to: "/$clubId",
-                params: { clubId: club.id.toString() },
-              });
-            }}
-          >
-            {isMember ? "Joined" : "Join Club"}
-          </Button>
+                await joinNewClubFn({
+                  data: {
+                    clubId: club.id,
+                    userId,
+                  },
+                });
+                router.invalidate();
+                router.navigate({
+                  to: "/$clubId",
+                  params: { clubId: club.id.toString() },
+                });
+              }}
+            >
+              Join Club
+            </Button>
+          )}
         </div>
       </div>
     </aside>

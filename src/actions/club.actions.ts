@@ -159,3 +159,19 @@ export const createClubFn = createServerFn({ method: "POST" })
       }
     },
   );
+
+export const deleteClubFn = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .validator((data: { clubId: number }) => data)
+  .handler(async ({ data, context }) => {
+    if (!context.session) throw redirect({ to: "/signin" });
+
+    try {
+      await db.delete(ClubTable).where(eq(ClubTable.id, data.clubId));
+
+      return { status: "success" };
+    } catch (error) {
+      console.log(error);
+      return { status: "error" };
+    }
+  });

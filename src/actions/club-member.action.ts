@@ -1,8 +1,11 @@
+import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
+import { and, eq } from "drizzle-orm";
 import { cache } from "react";
 import { getUserSessionFn } from "#/auth/actions";
 import { db } from "#/drizzle/db";
 import { ClubMemberTable } from "#/drizzle/schema";
+import { authMiddleware } from "#/middleware/auth-middleware";
 
 export const joinNewClubFn = createServerFn({ method: "POST" })
   .validator((data: { clubId: number; userId: number }) => data)
@@ -106,3 +109,37 @@ export const findClubsByUserIdFn = createServerFn({ method: "GET" }).handler(
     }
   },
 );
+
+export const findSessionClubMemberFn = createServerFn({ method: "GET" })
+  .middleware([authMiddleware])
+  .validator((data: { clubId: number }) => data)
+  .handler(async ({ data, context }) => {
+    if (!context.session) throw redirect({ to: "/signin" });
+
+    return await findClubMemberFn({
+      data: { clubId: data.clubId, userId: context.session.userId },
+    });
+  });
+
+export const deleteClubMemberFn = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
+  .validator((data: { clubId: number }) => data)
+  .handler(async ({ data, context }) => {
+    if (!context.session) throw redirect({ to: "/signin" });
+
+    try {
+      await db
+        .delete(ClubMemberTable)
+        .where(
+          and(
+            eq(ClubMemberTable.clubId, data.clubId),
+            eq(ClubMemberTable.memberId, context.session.userId),
+          ),
+        );
+
+      return { status: "success" };
+    } catch (error) {
+      console.log(error);
+      return { status: "error" };
+    }
+  });
