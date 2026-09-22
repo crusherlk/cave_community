@@ -163,6 +163,9 @@
   }
   body {
     @apply bg-muted;
+  } 
+  button {
+    @apply cursor-pointer;
   }
 }
 

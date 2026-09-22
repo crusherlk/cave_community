@@ -33,7 +33,7 @@ function RouteComponent() {
       {/* content */}
       <div className="space-y-2 pr-4">
         <p className="font-bold text-xl">{post.title}</p>
-        <p>{post.description}</p>
+        <p>{post.content}</p>
       </div>
       <div className="flex gap-2">
         <Button variant="outline">

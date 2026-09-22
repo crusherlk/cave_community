@@ -1,0 +1,1 @@
+ALTER TABLE `posts` RENAME COLUMN `description` TO `content`;

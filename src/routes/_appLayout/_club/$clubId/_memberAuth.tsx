@@ -13,5 +13,7 @@ export const Route = createFileRoute("/_appLayout/_club/$clubId/_memberAuth")({
         params: { clubId: params.clubId },
       });
     }
+
+    return { user: existingMember.user };
   },
 });

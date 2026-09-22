@@ -88,7 +88,7 @@ export const PostTable = sqliteTable(
   {
     id: integer().primaryKey({ autoIncrement: true }),
     title: text().notNull(),
-    description: text().notNull(),
+    content: text().notNull(),
     clubId: integer()
       .notNull()
       .references(() => ClubTable.id, { onDelete: "cascade" }),

@@ -43,7 +43,8 @@ export const findClubById = createServerFn({ method: "GET" })
   .handler(async ({ data }) => {
     try {
       if (Number.isNaN(data.clubId)) {
-        throw new Error("Not valid clubId");
+        return;
+        // throw new Error("Not valid clubId");
       }
 
       const club = await db.query.ClubTable.findFirst({
@@ -127,19 +128,6 @@ export const createClubFn = createServerFn({ method: "POST" })
 
           return { club };
         });
-
-        // const [club] = await db
-        //   .insert(ClubTable)
-        //   .values({
-        //     name: data.name,
-        //     shortDescription: data.shortDescription,
-        //     longDescription: data.longDescription,
-        //     ownerId: context.session.userId,
-        //   })
-        //   .returning({
-        //     id: ClubTable.id,
-        //     name: ClubTable.name,
-        //   });
 
         return {
           status: "success",
