@@ -3,6 +3,7 @@ import { useRouter } from "@tanstack/react-router";
 import { useState } from "react";
 import z from "zod";
 import { createPostFn } from "#/actions/post.actions";
+import EmojiButton from "../EmojiButton";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Field, FieldError } from "../ui/field";
@@ -70,6 +71,11 @@ function CreatePost({ username, club }: CreatePostProps) {
     form.reset();
   };
 
+  const handleEmojiOnClick = (emoji: string) => {
+    const content = form.getFieldValue("content").trimEnd();
+    form.setFieldValue("content", content.concat(emoji));
+  };
+
   return (
     <div className="rounded-lg bg-white p-4">
       {!isOpen ? (
@@ -120,6 +126,7 @@ function CreatePost({ username, club }: CreatePostProps) {
                     id={field.name}
                     name={field.name}
                     onBlur={field.handleBlur}
+                    value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
                     aria-invalid={isInvalid}
                     placeholder="Title"
@@ -144,6 +151,7 @@ function CreatePost({ username, club }: CreatePostProps) {
                     id={field.name}
                     name={field.name}
                     onBlur={field.handleBlur}
+                    value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
                     aria-invalid={isInvalid}
                     placeholder="Write something.."
@@ -156,7 +164,10 @@ function CreatePost({ username, club }: CreatePostProps) {
 
           {error && <FieldError>{error}</FieldError>}
 
-          <div className="flex items-center justify-end gap-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex gap-2">
+              <EmojiButton handleEmojiOnClick={handleEmojiOnClick} />
+            </div>
             <div className="flex gap-2">
               <Button
                 type="button"
@@ -164,7 +175,6 @@ function CreatePost({ username, club }: CreatePostProps) {
                 onClick={() => {
                   if (isCreatePostFormDirty) {
                     const isConfirmLeave = confirm("Are you sure?");
-
                     if (!isConfirmLeave) return;
                   }
 

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { RefreshCcwIcon, StickyNoteIcon } from "lucide-react";
 import { findPostsByClubId } from "#/actions/post.actions";
 import CreatePost from "#/components/post/createPost";
@@ -38,7 +38,14 @@ function ClubIndex() {
       />
       <section className="space-y-4">
         {posts.map((p) => (
-          <PostCard key={p.id} post={p} />
+          <Link
+            key={p.id}
+            className="block space-y-2 rounded-lg border border-border bg-white p-4"
+            to="/$clubId/posts/$id"
+            params={{ clubId: p.clubId.toString(), id: p.id.toString() }}
+          >
+            <PostCard key={p.id} post={p} />
+          </Link>
         ))}
 
         {(!posts || !posts.length) && (

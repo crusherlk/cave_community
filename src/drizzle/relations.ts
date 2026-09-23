@@ -25,7 +25,7 @@ export const relations = defineRelations(schema, (r) => ({
     user: r.one.UserTable({
       from: r.SessionTable.userId,
       to: r.UserTable.id,
-      optional: false
+      optional: false,
     }),
   },
 
@@ -47,12 +47,12 @@ export const relations = defineRelations(schema, (r) => ({
     user: r.one.UserTable({
       from: r.ClubMemberTable.memberId,
       to: r.UserTable.id,
-      optional: false
+      optional: false,
     }),
     club: r.one.ClubTable({
       from: r.ClubMemberTable.clubId,
       to: r.ClubTable.id,
-      optional: false
+      optional: false,
     }),
   },
 
@@ -88,10 +88,12 @@ export const relations = defineRelations(schema, (r) => ({
     post: r.one.PostTable({
       from: r.PostCommentTable.postId,
       to: r.PostTable.id,
+      optional: false,
     }),
     user: r.one.UserTable({
       from: r.PostCommentTable.userId,
       to: r.UserTable.id,
+      optional: false,
     }),
   },
 }));
