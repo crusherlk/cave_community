@@ -10,26 +10,31 @@ export const Route = createFileRoute(
 )({
   component: RouteComponent,
   loader: async ({ params }) => {
-    const post = await findPostByPostIdClubId({
-      data: {
-        postId: parseInt(params.id),
-        clubId: parseInt(params.clubId),
-      },
-    });
+    const [post, comments] = await Promise.all([
+      findPostByPostIdClubId({
+        data: {
+          postId: parseInt(params.id),
+          clubId: parseInt(params.clubId),
+        },
+      }),
+      findCommentsByPostIdFn({
+        data: { postId: parseInt(params.id) },
+      }),
+    ]);
 
     if (!post) throw notFound();
 
-    const comments = await findCommentsByPostIdFn({
-      data: { postId: parseInt(params.id) },
-    });
-
     return { post, comments };
   },
+  pendingComponent: () => <div>Loading...</div>,
 });
 
 function RouteComponent() {
-  const { user } = Route.useRouteContext();
+  const { existingMember } = Route.useRouteContext();
   const { post, comments } = Route.useLoaderData();
+
+  const user = existingMember.user;
+
   return (
     <div className="space-y-4 rounded-lg bg-white p-6">
       <PostCard post={post} />

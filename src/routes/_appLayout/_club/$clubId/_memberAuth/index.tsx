@@ -24,8 +24,10 @@ export const Route = createFileRoute("/_appLayout/_club/$clubId/_memberAuth/")({
 });
 
 function ClubIndex() {
-  const { user: currentUser, club: currentClub } = Route.useRouteContext();
+  const { existingMember, club: currentClub } = Route.useRouteContext();
   const { posts } = Route.useLoaderData();
+
+  const currentUser = existingMember.user;
 
   return (
     <main className="space-y-6">

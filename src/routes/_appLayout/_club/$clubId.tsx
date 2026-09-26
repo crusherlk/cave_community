@@ -7,25 +7,26 @@ import ClubSidePanel from "#/components/club/clubSidePanel";
 export const Route = createFileRoute("/_appLayout/_club/$clubId")({
   component: RouteComponent,
   beforeLoad: async ({ params }) => {
+    const clubId = parseInt(params.clubId);
     const club = await findClubById({
       data: {
-        clubId: parseInt(params.clubId),
+        clubId,
       },
     });
 
     if (club == null) throw notFound();
 
-    return { club: club };
-  },
-  loader: async ({ params, context }) => {
     const existingMember = await getClubMemberRoleFn({
-      data: { clubId: parseInt(params.clubId) },
+      data: { clubId },
     });
 
+    return { club: club, existingMember: existingMember };
+  },
+  loader: async ({ context }) => {
     return {
       club: context.club,
-      user: existingMember.user,
-      isMember: existingMember.isMember,
+      user: context.existingMember.user,
+      isMember: context.existingMember.isMember,
     };
   },
 });

@@ -11,7 +11,6 @@ export function getRouter() {
     scrollRestoration: true,
     context: { queryClient },
     defaultPreload: "intent",
-    defaultPreloadStaleTime: 0,
     defaultErrorComponent: ({ error }) => <div>{JSON.stringify(error)}</div>,
     defaultNotFoundComponent: ({ routeId }) => (
       <div>{`${routeId} not found!`}</div>

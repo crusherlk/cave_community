@@ -1,20 +1,11 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { LockIcon, TagIcon, UsersIcon } from "lucide-react";
-import { findClubById } from "#/actions/club.actions";
 import { Avatar, AvatarFallback } from "#/components/ui/avatar";
 
 export const Route = createFileRoute("/_appLayout/_club/$clubId/about")({
   component: RouteComponent,
-  loader: async ({ params }) => {
-    const club = await findClubById({
-      data: {
-        clubId: parseInt(params.clubId),
-      },
-    });
-
-    if (!club) throw notFound();
-
-    return { club };
+  loader: ({ context }) => {
+    return { club: context.club };
   },
 });
 

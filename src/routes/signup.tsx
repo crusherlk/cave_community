@@ -33,7 +33,6 @@ function RouteComponent() {
 
       if (res.status !== "success") {
         alert(res.message);
-
         return;
       }
 

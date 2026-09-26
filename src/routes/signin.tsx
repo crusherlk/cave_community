@@ -36,6 +36,7 @@ function RouteComponent() {
 
       if (res.status !== "success") {
         setError(res.message);
+        return;
       }
 
       navigate({ to: "/" });
