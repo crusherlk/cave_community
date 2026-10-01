@@ -4,6 +4,7 @@ import { findPostByPostIdClubId } from "#/actions/post.actions";
 import CommentCard from "#/components/comment/commentCard";
 import CreateComment from "#/components/comment/createComment";
 import PostCard from "#/components/post/postCard";
+import { Spinner } from "#/components/ui/spinner";
 
 export const Route = createFileRoute(
   "/_appLayout/_club/$clubId/_memberAuth/posts/$id",
@@ -26,7 +27,7 @@ export const Route = createFileRoute(
 
     return { post, comments };
   },
-  pendingComponent: () => <div>Loading...</div>,
+  pendingComponent: () => <Spinner />,
 });
 
 function RouteComponent() {
