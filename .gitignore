@@ -12,6 +12,5 @@ dist-ssr
 __unconfig*
 todos.json
 
-
 # cloudflare
-wrangler.jsonc
+.dev.vars*

@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cave-community",
+  "compatibility_date": "2026-09-26",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "@tanstack/react-start/server-entry",
+  
+  "observability": {
+    "enabled": true
+  },
+  
+  "secrets": {
+    "required": ["TURSO_AUTH_TOKEN", "TURSO_DATABASE_URL"]
+  }
+}
